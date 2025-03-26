@@ -90,10 +90,10 @@ function updateBarcodeList() {
         tr.innerHTML = `
             ${!isMobileDevice() 
                 ? `<td>${index + 1}</td>`
-                : `<td class="stt_${index + 1}" data-index="${index}"><i class="fa-solid fa-trash"></i>${index + 1}</td>`
+                : `<td class="stt_${index + 1}"><i class="delete fa-solid fa-trash" data-index="${index}" style="color: red;"></i> ${index + 1}</td>`
             }
             <td>${item.barcode}</td>
-            <td class="QtyofRow_${index + 1}" data-index="${index}">${item.quantity}</td>
+            <td class="Row_${index + 1}" data-index="${index}">${item.quantity}</td>
             ${!isMobileDevice() 
                 ? `<td><button class="delete" data-index="${index}">Xóa</button></td>`
                 : ''
@@ -103,6 +103,10 @@ function updateBarcodeList() {
     });
 
     elements.tableBody.querySelectorAll('button.delete').forEach(button => {
+        button.addEventListener('click', (e) => deleteItem(e.target.dataset.index));
+    });
+
+    elements.tableBody.querySelectorAll('i.delete').forEach(button => {
         button.addEventListener('click', (e) => deleteItem(e.target.dataset.index));
     });
 
@@ -229,15 +233,16 @@ function startZXing(video) {
 
                 if (checkDuplicates && existingIndex !== -1) {
                     alert(`TRÙNG MÃ, mã: ${code}; đã có trong danh sách.`);
+                    // closeScanner();
                 } else {
-                    const quantity = prompt(`Nhập số lượng cho mã ${code}:`, "1");
+                    const quantity = prompt(`Nhập số lượng cho mã ${code}:`, "");
                     if (quantity === null) return;
                     if (isNaN(quantity) || Number(quantity) <= 0) {
                         alert("Số lượng phải là số dương!");
                     } else {
                         items.push({ barcode: code, quantity: Number(quantity) });
                         updateBarcodeList();
-                        // closeScanner();
+                        closeScanner();
                         openScanner();
                     }
                 }
