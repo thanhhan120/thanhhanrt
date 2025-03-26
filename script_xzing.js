@@ -90,7 +90,7 @@ function updateBarcodeList() {
         tr.innerHTML = `
             ${!isMobileDevice() 
                 ? `<td>${index + 1}</td>`
-                : `<td class="stt_${index + 1}" data-index="${index}">${index + 1}</td>`
+                : `<td class="stt_${index + 1}" data-index="${index}"><i class="fa-solid fa-trash"></i>${index + 1}</td>`
             }
             <td>${item.barcode}</td>
             <td class="QtyofRow_${index + 1}" data-index="${index}">${item.quantity}</td>
